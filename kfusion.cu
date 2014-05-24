@@ -525,8 +525,6 @@ void KFusion::Raycast(){
 }
 
 bool KFusion::Track() {
-    const Matrix4 invK = getInverseCameraMatrix(configuration.camera);
-
     vector<dim3> grids;
     for(int i = 0; i < configuration.iterations.size(); ++i)
         grids.push_back(divup(configuration.inputSize >> i, configuration.imageBlock));
