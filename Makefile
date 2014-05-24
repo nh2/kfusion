@@ -18,8 +18,8 @@ KF_DRIVER ?= libfreenect
 
 # Default flags
 KF_CPPFLAGS = -Ithirdparty
-KF_CXXFLAGS = -g -m64 -O3
-KF_NVCCFLAGS = -g -m64 -O3 -use_fast_math
+KF_CXXFLAGS = -Wall -g -m64 -O3
+KF_NVCCFLAGS = -g -m64 -O3 -use_fast_math --compiler-options -Wall,-Wno-unused-local-typedefs
 KF_LDFLAGS = -g -m64 -lpthread -Xlinker -lcudart
 
 ifdef CUDA_INCLUDE_PATH
