@@ -481,7 +481,7 @@ int InitKinect( uint16_t * depth_buffer[2], unsigned char * rgb_buffer, const st
     OpenNI::enumerateDevices(&deviceList);
     int nr_devices = deviceList.getSize();
 
-    if(nr_devices < 1) {
+    if(replay_path == "" && nr_devices < 1) {
         cout << "OpenNI: No devices found" << endl;
         OpenNI::shutdown();
         return 1;
