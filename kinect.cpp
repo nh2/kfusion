@@ -108,15 +108,15 @@ void display(void){
     glClear(GL_COLOR_BUFFER_BIT);
     glRasterPos2i(0, 0);
     glDrawPixels(lightScene); // left top
-    glRasterPos2i(0, 240);
-    glPixelZoom(0.5, -0.5);
+    glRasterPos2i(0, 480);
+    // glPixelZoom(0.5, -0.5);
     glDrawPixels(rgbImage); // left bottom
-    glPixelZoom(1,-1);
-    glRasterPos2i(320,0);
+    // glPixelZoom(1,-1);
+    glRasterPos2i(640,0);
     glDrawPixels(lightModel); // middle top
-    glRasterPos2i(320,240);
+    glRasterPos2i(640,480);
     glDrawPixels(trackModel); // middle bottom
-    glRasterPos2i(640, 0);
+    glRasterPos2i(640*2, 0);
     glDrawPixels(texModel); // right
     const double endProcessing = Stats.sample("draw");
 
@@ -258,8 +258,19 @@ int main(int argc, char ** argv) {
     config.combinedTrackAndReduce = false;
 
     // change the following parameters for using 640 x 480 input images
-    config.inputSize = make_uint2(320,240);
-    config.camera =  make_float4(531.15/2, 531.15/2, 640/4, 480/4);
+    // config.inputSize = make_uint2(320,240);
+    config.inputSize = make_uint2(640,480);
+    // config.camera =  make_float4(531.15, 531.15, 640/2, 480/2);
+    config.camera =  make_float4(535.002029, 535.002086, 640/2, 480/2);
+    // fx 535.002029
+    // fy 535.002086
+    // cx 320.000000
+    // cy 240.000000
+    // rgb_fx 535.002014
+    // rgb_fy 535.002014
+    // rgb_cx 320.000000
+    // rgb_cy 240.000000
+
 
     // config.iterations is a vector<int>, the length determines
     // the number of levels to be used in tracking
@@ -278,7 +289,7 @@ int main(int argc, char ** argv) {
 
     string simultaneous_recording_path = getFlag(args, "--simultaneous-recording"); // "" for no recording
 
-    initPose = SE3<float>(makeVector(size/2, size/2, 0, 0, 0, 0));
+    initPose = SE3<float>(makeVector(size/2, size/2, size/2, 0, 0, 0));
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE );

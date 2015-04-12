@@ -609,6 +609,57 @@ int InitKinect( uint16_t * depth_buffer[2], unsigned char * rgb_buffer, const st
         return 1;
     }
 
+
+    bool hardwareRegistration = true;
+
+    float proj_x = 0, proj_y = 0, proj_z = 0;
+    CoordinateConverter::convertWorldToDepth(depth_stream, 0, 0, -1, &proj_x, &proj_y, &proj_z);
+
+    double cx = proj_x;
+    double cy = proj_y;
+
+    CoordinateConverter::convertWorldToDepth (depth_stream, 1, 1, -1, &proj_x, &proj_y, &proj_z);
+    double fx = -(proj_x - cx);
+    double fy = proj_y - cy;
+
+    printf("nh2: fx without registration %f\n", fx);
+    printf("nh2: fy without registration %f\n", fy);
+    printf("nh2: cx without registration %f\n", cx);
+    printf("nh2: cy without registration %f\n", cy);
+
+    // When hardware alignment is enabled, to focus length has to be adjusted
+    // to match the color one. This empirical factor computed by averaging checkerboard
+    // calibrations seem quite good.
+    // const double f_correction_factor = m_hardware_registration ? 528.0/570.34 : 1.0;
+    const double f_correction_factor = hardwareRegistration ? 535.0/570.34 : 1.0;
+    fx *= f_correction_factor;
+    fy *= f_correction_factor;
+
+    int rgb_width = color_stream.getVideoMode().getResolutionX();
+
+    int depth_width = depth_stream.getVideoMode().getResolutionX();
+
+    float width_ratio = float(rgb_width)/depth_width;
+
+    float rgb_fx = fx * width_ratio;
+    // Pixels are square on a Kinect.
+    // Image height gets cropped when going from 1280x1024 in 640x480.
+    // The ratio remains 2.
+    float rgb_fy = rgb_fx;
+    float rgb_cx = cx * width_ratio;
+    float rgb_cy = cy * width_ratio;
+
+    printf("nh2: fx %f\n", fx);
+    printf("nh2: fy %f\n", fy);
+    printf("nh2: cx %f\n", cx);
+    printf("nh2: cy %f\n", cy);
+
+    printf("nh2: rgb_fx %f\n", rgb_fx);
+    printf("nh2: rgb_fy %f\n", rgb_fy);
+    printf("nh2: rgb_cx %f\n", rgb_cx);
+    printf("nh2: rgb_cy %f\n", rgb_cy);
+
+
     // Start depth
     status = depth_stream.start();
 

@@ -130,17 +130,17 @@ void renderDepthMap( Image<uchar3> out, const Image<float> & depth, const float 
 __global__ void renderTrack( Image<uchar4> out, const Image<TrackData> data ){
     const uint2 pos = thr2pos2();
     switch(data[pos].result){
-    case 1: out[pos] = make_uchar4(128, 128, 128,0);  // ok
+    case 1: out[pos] = make_uchar4(128, 128, 128,0);  // grey - ok
         break;
-    case -1: out[pos] = make_uchar4(0, 0, 0,0);      // no input
+    case -1: out[pos] = make_uchar4(0, 0, 0,0);       // black - no input
         break;
-    case -2: out[pos] = make_uchar4(255,0,0,0);        // not in image
+    case -2: out[pos] = make_uchar4(255,0,0,0);       // red - not in image
         break;
-    case -3:  out[pos] = make_uchar4(0,255,0,0);        // no correspondence
+    case -3:  out[pos] = make_uchar4(0,255,0,0);      // green - no correspondence
         break;
-    case -4: out[pos] = make_uchar4(0,0,255,0);        // to far away
+    case -4: out[pos] = make_uchar4(0,0,255,0);       // blue - to far away
         break;
-    case -5: out[pos] = make_uchar4(255,255,0,0);     // wrong normal
+    case -5: out[pos] = make_uchar4(255,255,0,0);     // yellow - wrong normal
         break;
     }
 }
